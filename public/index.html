@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Vue</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.css">
+</head>
+<body>
+
+<div id="app">
+    <div class="container" style="padding: 20px">
+        <div class="box">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Bus Number</th>
+                    <th>ETA</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="bus in schedules">
+                    <td>{{ bus.busNum }}</td>
+                    <td>{{ bus.eta }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+</script>
+</body>
+</html>
