@@ -1,5 +1,6 @@
 var Nightmare = require('nightmare');
 var cheerio = require('cheerio');
+var _ = require('lodash');
 var nightmare = Nightmare({
   show: true,
   openDevTools: {
@@ -40,6 +41,7 @@ function parse($html) {
   var buses = $html('.line-number')
   
   var results = [];
+  var resultsUniq = [];
   var releventBusNums = ['501','502','29','247'];
   
   var filteredBuses = buses.filter(function(idx,elem) {
@@ -49,12 +51,17 @@ function parse($html) {
   
   
   filteredBuses.each(function(idx,elem) {
+    var minutesRE = /\d+/;
     var busNum = $(elem).html();
     var eta =  $(elem).parents('route-summary').find('.eta').html();
-    results.push ({busNum,eta})
+    etaMin = minutesRE.exec(eta)[0]
+  
+    results.push ({busNum,etaMin})
   })
   
-  return results
+  resultsUniq = _.uniqBy(results, function(elem) { return [elem.busNum, elem.eta].join(); });
+    
+  return resultsUniq
 }
 
 

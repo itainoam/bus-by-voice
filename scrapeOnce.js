@@ -13,7 +13,4 @@ db.defaults({ schedules: []})
     db.get('schedules')
       .push(results)
       .value();
-})
-
-
-
+});
