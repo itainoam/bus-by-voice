@@ -2,7 +2,7 @@ var Nightmare = require('nightmare');
 var cheerio = require('cheerio');
 var _ = require('lodash');
 var nightmare = Nightmare({
-  show: true,
+  show: false,
   openDevTools: {
     mode: 'detach'
   },
@@ -21,11 +21,18 @@ function scrapeBuses() {
       results =  document.querySelector(selector).innerHTML;
       return results;
     }, '.suggested-routes md-list')
-    .end()
     .then(function(html) {
       var $html = cheerio.load(html);
       var schedules = parse($html);
       console.log('schedules: ', schedules);
+      return schedules;
+    }).then(function(schedules) {
+      // makes sure non of the electron processes are left running
+      nightmare.end();
+      nightmare.proc.disconnect();
+      nightmare.proc.kill();
+      nightmare.ended = true;
+      nightmare = null;
       return schedules;
     })
     .catch(function (error) {
@@ -37,6 +44,7 @@ function scrapeBuses() {
 
 
 function parse($html) {
+  // TODO: test that remove duplicates work and figure out why some buses with time
   var $ = $html;
   var buses = $html('.line-number')
   
@@ -54,9 +62,9 @@ function parse($html) {
     var minutesRE = /\d+/;
     var busNum = $(elem).html();
     var eta =  $(elem).parents('route-summary').find('.eta').html();
-    etaMin = minutesRE.exec(eta)[0]
+    var etaMin = minutesRE.exec(eta)[0]
   
-    results.push ({busNum,etaMin})
+    results.push ({busNum:busNum,etaMin:etaMin})
   })
   
   resultsUniq = _.uniqBy(results, function(elem) { return [elem.busNum, elem.eta].join(); });
