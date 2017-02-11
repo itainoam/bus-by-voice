@@ -61,10 +61,12 @@ function parse($html) {
   filteredBuses.each(function(idx,elem) {
     var minutesRE = /\d+/;
     var busNum = $(elem).html();
+    debugger;
     var eta =  $(elem).parents('route-summary').find('.eta').html();
-    var etaMin = minutesRE.exec(eta)[0];
-  
-    results.push ({busNum:busNum,etaMin:etaMin})
+    if (eta) {
+      var etaMin = minutesRE.exec(eta)[0];
+      results.push ({busNum:busNum,etaMin:etaMin})
+    }
   });
   
   resultsUniq = _.uniqBy(results, function(elem) { return [elem.busNum, elem.eta].join(); });
