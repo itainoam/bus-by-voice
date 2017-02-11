@@ -5,7 +5,7 @@ var nightmare = Nightmare({
   show: false,
   openDevTools: {
     mode: 'detach'
-  },
+  }
 });
 
 var results;
@@ -46,26 +46,26 @@ function scrapeBuses() {
 function parse($html) {
   // TODO: test that remove duplicates work and figure out why some buses with time
   var $ = $html;
-  var buses = $html('.line-number')
+  var buses = $html('.line-number');
   
   var results = [];
-  var resultsUniq = [];
+  var resultsUniq;
   var releventBusNums = ['501','502','29','247'];
   
   var filteredBuses = buses.filter(function(idx,elem) {
     const busNum = elem.children[0].data;
     return (releventBusNums.indexOf(busNum) !== -1);
-  })
+  });
   
   
   filteredBuses.each(function(idx,elem) {
     var minutesRE = /\d+/;
     var busNum = $(elem).html();
     var eta =  $(elem).parents('route-summary').find('.eta').html();
-    var etaMin = minutesRE.exec(eta)[0]
+    var etaMin = minutesRE.exec(eta)[0];
   
     results.push ({busNum:busNum,etaMin:etaMin})
-  })
+  });
   
   resultsUniq = _.uniqBy(results, function(elem) { return [elem.busNum, elem.eta].join(); });
     
