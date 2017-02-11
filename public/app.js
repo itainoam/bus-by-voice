@@ -13,7 +13,7 @@ new Vue({
     function refreshData() {
       axios.get('/api/buses')
         .then(function(response) {
-          self.schedules = response.data[0];
+          self.schedules = response.data;
         })
         .catch(function(error) {
           console.log(error);
