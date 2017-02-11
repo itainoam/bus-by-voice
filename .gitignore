@@ -1,5 +1,6 @@
 .idea
 node_modules/
 schedules.json
-
+alexa/.vscode/
+alexa/Archive.zip
 npm-debug.log
