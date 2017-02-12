@@ -7,9 +7,6 @@ db.defaults({ schedules: []})
   .value();
   
   scrapeBuses().then(function(results) {
-    db.set('schedules', [])
-      .value();
-    db.get('schedules')
-      .push(results[0])
+    db.set('schedules', results)
       .value();
 });
